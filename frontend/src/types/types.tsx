@@ -1,16 +1,11 @@
-//types/types.tsx
-export interface Reply {
-    id: number;
-    content: string;
-    createdAt: string;
-    score: number;
-    user: {
-        image: {
-            png: string;
-            webp: string;
-        };
-        username: string;
-    };
+export interface UserImage {
+    png: string;
+    webp: string;
+}
+
+export interface User {
+    image: UserImage;
+    username: string;
 }
 
 export interface Comment {
@@ -18,14 +13,25 @@ export interface Comment {
     content: string;
     createdAt: string;
     score: number;
-    user: {
-        image: {
-            png: string;
-            webp: string;
-        };
-        username: string;
-    };
+    user: User;
     replies: Reply[];
+}
+
+export interface Reply {
+    id: number;
+    content: string;
+    createdAt: string;
+    score: number;
+    replyingTo: string;
+    user: User;
+}
+
+export interface ItemProps {
+    key: number | string;
+    data: any;
+    content?: React.ReactNode;
+    itemStyle: string;
+    buttonReplyStyle: string;
 }
 
 export interface CommentListProps {
@@ -34,4 +40,12 @@ export interface CommentListProps {
 
 export interface CommentItemProps {
     comment: Comment;
+}
+
+export interface ReplyListProps {
+    replies: Reply[];
+}
+
+export interface ReplyItemProps {
+    reply: Reply;
 }

@@ -1,28 +1,28 @@
 import React from 'react';
 
-import ReplyList from './ReplyList';
-import { CommentItemProps } from '../../types/types';
+import { ReplyItemProps } from '../../types/types';
 
-const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
+const ReplyItem: React.FC<ReplyItemProps> = ({ reply }) => {
     return (
-        <div>
-            <div className="grid grid-cols-7 gap-x-1 gap-y-4 grid-flow-row w-[344px] bg-text-white p-4 my-4 rounded-lg m-auto lg:grid-cols-12 lg:w-[732px] h-full">
+        <div className="w-[344px] lg:w-[660px] m-auto border-l-2 border-light-gray">
+            <div className="grid grid-cols-7 gap-x-1 gap-y-4 grid-flow-row  bg-text-white p-4 my-4 ml-3 lg:ml-9 rounded-lg lg:grid-cols-12 h-full w-[332px] lg:w-[660px]">
                 <img
-                    src={comment.user.image.png}
-                    alt={comment.user.username}
+                    src={reply.user.image.png}
+                    alt={reply.user.username}
                     className="col-span-1 w-8 h-8 lg:ml-2"
                 />
 
                 <p className="col-span-2 font-bold text-dark-blue flex items-center">
-                    {comment.user.username}
+                    {reply.user.username}
                 </p>
 
                 <p className="col-span-4 pl-12  text-grayish-blue flex items-center">
-                    {comment.createdAt}
+                    {reply.createdAt}
                 </p>
 
                 <p className="col-span-7 lg:col-span-11 lg:col-start-2 text-grayish-blue lg:px-2">
-                    {comment.content}
+                    <span className="font-bold text-moderate-blue">{`@${reply.replyingTo} `}</span>
+                    {reply.content}
                 </p>
 
                 <div className="col-span-3 lg:col-span-1 lg:col-start-1 lg:row-start-1 lg:row-span-2 flex lg:flex-col items-center justify-around w-24 h-10 lg:w-10 lg:h-24 bg-very-light-gray rounded-lg">
@@ -30,7 +30,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
                         <img src="images/icons/icon-plus.svg" alt="plus" />
                     </button>
                     <p className="font-bold text-moderate-blue">
-                        {comment.score}
+                        {reply.score}
                     </p>
                     <button>
                         <img src="images/icons/icon-minus.svg" alt="minus" />
@@ -38,7 +38,7 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
                 </div>
 
                 <div className="col-span-4 lg:col-span-4 lg:col-start-9 lg:row-start-1 flex justify-between items-center ">
-                    <button className="flex pl-24 lg:pl-36 items-center ">
+                    <button className="flex pl-24 lg:pl-[116px] items-center ">
                         <img
                             src="images/icons/icon-reply.svg"
                             alt="reply"
@@ -50,12 +50,8 @@ const CommentItem: React.FC<CommentItemProps> = ({ comment }) => {
                     </button>
                 </div>
             </div>
-
-            {comment.replies && comment.replies.length > 0 && (
-                <ReplyList replies={comment.replies} />
-            )}
         </div>
     );
 };
 
-export default CommentItem;
+export default ReplyItem;
