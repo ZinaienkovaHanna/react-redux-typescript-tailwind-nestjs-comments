@@ -10,7 +10,7 @@ const Item: React.FC<ItemProps> = ({
 }) => {
     return (
         <div
-            className={`grid grid-cols-7 lg:grid-cols-12 gap-x-1 gap-y-4 grid-flow-row bg-text-white rounded-lg h-full m-auto p-4 my-4 ${itemStyle}`}
+            className={`grid grid-cols-7 lg:grid-cols-12 gap-x-1 gap-y-4 grid-flow-row bg-white rounded-lg h-full m-auto p-4 my-4 ${itemStyle}`}
         >
             <img
                 src={data.user.image.png}

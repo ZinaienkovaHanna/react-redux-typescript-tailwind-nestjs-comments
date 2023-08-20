@@ -12,7 +12,6 @@ module.exports = {
                 'moderate-blue': '#5357B6',
                 'very-light-gray': '#F5F6FA',
                 'soft-red': '#ED6368',
-                'text-white': '#FFF',
                 'light-gray': '#E9EBF0',
             },
         },

@@ -26,6 +26,10 @@ export interface Reply {
     user: User;
 }
 
+export interface CommentListProps {
+    comments: Comment[];
+}
+
 export interface ItemProps {
     key: number | string;
     data: any;
@@ -34,18 +38,8 @@ export interface ItemProps {
     buttonReplyStyle: string;
 }
 
-export interface CommentListProps {
-    comments: Comment[];
-}
-
-export interface CommentItemProps {
-    comment: Comment;
-}
-
-export interface ReplyListProps {
-    replies: Reply[];
-}
-
-export interface ReplyItemProps {
-    reply: Reply;
+export interface FormProps {
+    button: string;
+    placeholder: string;
+    currentUser: any;
 }
