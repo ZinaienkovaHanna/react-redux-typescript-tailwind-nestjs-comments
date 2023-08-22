@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Item from '../Item/Item';
-
 import { CommentListProps } from '../../types/types';
 
 const CommentList: React.FC<CommentListProps> = ({ comments }) => {

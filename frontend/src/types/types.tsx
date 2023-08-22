@@ -1,3 +1,5 @@
+//types
+
 // components
 
 export interface UserImage {
@@ -11,7 +13,7 @@ export interface User {
 }
 
 export interface Comment {
-    id: number;
+    id: number | string;
     content: string;
     createdAt: string;
     score: number;
@@ -43,7 +45,14 @@ export interface ItemProps {
 export interface FormProps {
     button: string;
     placeholder: string;
-    currentUser: any;
+    currentUser: User;
+    onClick: () => void;
+    value: string;
+    onChange: (
+        e: React.ChangeEvent<
+            HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+        >
+    ) => void;
 }
 
 //store
@@ -64,7 +73,7 @@ export enum CommentActionTypes {
 
 interface AddCommentAction {
     type: CommentActionTypes.ADD_COMMENT;
-    payload: Comment;
+    payload: Comment[];
 }
 
 interface DeleteCommentAction {

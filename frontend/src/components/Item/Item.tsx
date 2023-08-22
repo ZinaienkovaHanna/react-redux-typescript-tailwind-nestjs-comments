@@ -1,5 +1,7 @@
-import React from 'react';
+//src/Item/Item.tsx
 
+import React from 'react';
+import { formatDate } from '../../utils/utils';
 import { ItemProps } from '../../types/types';
 
 const Item: React.FC<ItemProps> = ({
@@ -23,10 +25,10 @@ const Item: React.FC<ItemProps> = ({
             </p>
 
             <p className="col-span-4 pl-12  text-grayish-blue flex items-center">
-                {data.createdAt}
+                {formatDate(data.createdAt)}
             </p>
 
-            <p className="col-span-7 lg:col-span-11 lg:col-start-2 text-grayish-blue lg:px-2">
+            <p className="col-span-7 lg:col-span-11 lg:col-start-2 text-grayish-blue lg:px-2 break-words">
                 {content}
                 {data.content}
             </p>

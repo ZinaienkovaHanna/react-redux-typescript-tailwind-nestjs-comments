@@ -1,3 +1,5 @@
+//src/store/reducers/commentReducer
+
 import commentsData from '../../data/data.json';
 
 import {
@@ -16,10 +18,7 @@ const commentsReducer = (state = initialState, action: CommentAction) => {
         case CommentActionTypes.ADD_COMMENT:
             return {
                 ...state,
-                commentsData: {
-                    ...state,
-                    comments: [...state.comments, action.payload],
-                },
+                comments: [...state.comments, action.payload],
             };
 
         default:
