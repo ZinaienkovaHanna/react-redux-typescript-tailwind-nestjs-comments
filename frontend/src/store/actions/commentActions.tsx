@@ -8,3 +8,17 @@ export const addCommentAction = (comment: Comment) => {
         payload: comment,
     };
 };
+
+export const deleteCommentAction = (id: string) => {
+    return {
+        type: CommentActionTypes.DELETE_COMMENT,
+        payload: id,
+    };
+};
+
+export const deleteReplyAction = (id: string) => {
+    return {
+        type: CommentActionTypes.DELETE_REPLY,
+        payload: id,
+    };
+};

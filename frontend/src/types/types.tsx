@@ -2,7 +2,7 @@
 
 // components
 
-export interface UserImage {
+interface UserImage {
     png: string;
     webp: string;
 }
@@ -12,17 +12,8 @@ export interface User {
     username: string;
 }
 
-export interface Comment {
-    id: number | string;
-    content: string;
-    createdAt: string;
-    score: number;
-    user: User;
-    replies: Reply[];
-}
-
 export interface Reply {
-    id: number;
+    id: string;
     content: string;
     createdAt: string;
     score: number;
@@ -30,16 +21,24 @@ export interface Reply {
     user: User;
 }
 
-export interface CommentListProps {
-    comments: Comment[];
+export interface Comment {
+    id: string;
+    content: string;
+    createdAt: string;
+    score: number;
+    user: User;
+    replies: Reply[];
 }
 
 export interface ItemProps {
-    key: number | string;
     data: any;
+    currentUser: User;
     content?: React.ReactNode;
     itemStyle: string;
     buttonReplyStyle: string;
+    buttonDeleteStyle: string;
+    deleteItemHandler: () => void;
+    // editHandler: () => void;
 }
 
 export interface FormProps {
@@ -57,7 +56,7 @@ export interface FormProps {
 
 //store
 
-export interface CommentStateType {
+export interface CommentsDataStateType {
     currentUser: {
         image: UserImage;
         username: string;
@@ -69,15 +68,21 @@ export enum CommentActionTypes {
     ADD_COMMENT = 'ADD_COMMENT',
     DELETE_COMMENT = 'DELETE_COMMENT',
     EDIT_COMMENT = 'EDIT_COMMENT',
+    DELETE_REPLY = 'DELETE_REPLY',
 }
 
 interface AddCommentAction {
     type: CommentActionTypes.ADD_COMMENT;
-    payload: Comment[];
+    payload: Comment;
 }
 
 interface DeleteCommentAction {
     type: CommentActionTypes.DELETE_COMMENT;
+    payload: string;
+}
+
+interface DeleteReplyAction {
+    type: CommentActionTypes.DELETE_REPLY;
     payload: string;
 }
 
@@ -90,4 +95,5 @@ interface EditCommentAction {
 export type CommentAction =
     | AddCommentAction
     | DeleteCommentAction
-    | EditCommentAction;
+    | EditCommentAction
+    | DeleteReplyAction;

@@ -3,12 +3,12 @@
 import commentsData from '../../data/data.json';
 
 import {
-    CommentStateType,
+    CommentsDataStateType,
     CommentActionTypes,
     CommentAction,
 } from '../../types/types';
 
-const initialState: CommentStateType = {
+const initialState: CommentsDataStateType = {
     currentUser: commentsData.currentUser,
     comments: commentsData.comments,
 };
@@ -21,10 +21,33 @@ const commentsReducer = (state = initialState, action: CommentAction) => {
                 comments: [...state.comments, action.payload],
             };
 
+        case CommentActionTypes.DELETE_COMMENT:
+            return {
+                ...state,
+                comments: state.comments.filter(
+                    (comment) => comment.id !== action.payload
+                ),
+            };
+
+        case CommentActionTypes.DELETE_REPLY:
+            return {
+                ...state,
+                comments: state.comments.map((comment) => {
+                    return {
+                        ...comment,
+                        replies: comment.replies.filter(
+                            (reply) => reply.id !== action.payload
+                        ),
+                    };
+                }),
+            };
+
         default:
             return state;
     }
 };
+
+export default commentsReducer;
 
 // const commentsReducer = (state = initialState, action: CommentAction) => {
 //     switch (action.type) {
@@ -51,5 +74,3 @@ const commentsReducer = (state = initialState, action: CommentAction) => {
 //             return state;
 //     }
 // };
-
-export default commentsReducer;
