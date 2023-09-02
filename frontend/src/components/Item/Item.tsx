@@ -12,20 +12,17 @@ const Item: React.FC<ItemProps> = ({
     itemStyle,
     buttonReplyStyle,
     buttonDeleteStyle,
-    onClickReply,
-    deleteItemHandler,
+    addReply,
+    deleteItem,
     // editHandler,
 }) => {
     const [score, setScore] = useState(data.score);
-    const [isCurrentUserComment, setIsCurrentUserComment] = useState(
-        data.user.username === currentUser.username
-    );
     const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     return (
         <>
             <div
-                className={`grid grid-cols-7 lg:grid-cols-12 gap-x-1 gap-y-4 grid-flow-row bg-white rounded-lg h-full m-auto p-4 my-4 w-[344px] lg:w-[732px] ${itemStyle}`}
+                className={`grid grid-cols-7 lg:grid-cols-12 gap-x-1 gap-y-4 grid-flow-row bg-white rounded-lg h-full m-auto p-4 my-4  ${itemStyle}`}
             >
                 <img
                     src={data.user.image.png}
@@ -35,7 +32,7 @@ const Item: React.FC<ItemProps> = ({
 
                 <p className="col-span-3 font-bold text-dark-blue flex items-center">
                     {data.user.username}{' '}
-                    {isCurrentUserComment && (
+                    {data.user.username === currentUser.username && (
                         <span className="ml-2 text-xs text-white bg-moderate-blue w-9 h-5 rounded-sm flex items-center justify-center">
                             you
                         </span>
@@ -66,48 +63,42 @@ const Item: React.FC<ItemProps> = ({
                 </div>
 
                 <div className="col-span-4 lg:col-span-4 lg:col-start-9 lg:row-start-1 flex justify-between items-center ">
-                    {isCurrentUserComment ? (
+                    {data.user.username === currentUser.username ? (
                         <>
                             <button
                                 onClick={() => setShowDeleteModal(true)}
-                                className={`flex items-center pl-[26px] lg:pl-14  ${buttonDeleteStyle}`}
+                                className={`flex items-center text-soft-red hover:opacity-50 ${buttonDeleteStyle}`}
                             >
                                 <img
                                     src="images/icons/icon-delete.svg"
                                     alt="delete"
                                     className="mr-2"
                                 />
-                                <span className="font-bold text-soft-red">
-                                    Delete
-                                </span>
+                                <span className="font-bold ">Delete</span>
                             </button>
                             <button
                                 // onClick={editHandler}
-                                className={`flex items-center pr-3 lg:pr-6`}
+                                className={`flex items-center text-moderate-blue hover:opacity-50 pr-3 lg:pr-6`}
                             >
                                 <img
                                     src="images/icons/icon-edit.svg"
                                     alt="edit"
                                     className="mr-2"
                                 />
-                                <span className="font-bold text-moderate-blue">
-                                    Edit
-                                </span>
+                                <span className="font-bold ">Edit</span>
                             </button>
                         </>
                     ) : (
                         <button
-                            className={`flex items-center pl-24 lg:pl-36 ${buttonReplyStyle}`}
-                            onClick={onClickReply}
+                            className={`flex items-center text-moderate-blue hover:opacity-50 pl-24 ${buttonReplyStyle}`}
+                            onClick={addReply}
                         >
                             <img
                                 src="images/icons/icon-reply.svg"
                                 alt="reply"
                                 className="mr-2"
                             />
-                            <span className="font-bold text-moderate-blue">
-                                Reply
-                            </span>
+                            <span className="font-bold">Reply</span>
                         </button>
                     )}
                 </div>
@@ -116,7 +107,7 @@ const Item: React.FC<ItemProps> = ({
             {showDeleteModal && (
                 <DeleteItemModal
                     onCancel={() => setShowDeleteModal(false)}
-                    onConfirm={deleteItemHandler}
+                    onConfirm={deleteItem}
                 />
             )}
         </>

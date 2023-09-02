@@ -6,7 +6,7 @@ const Form: React.FC<FormProps> = ({
     button,
     placeholder,
     currentUser,
-    onClick,
+    addComment,
     value,
     onChange,
     formStyle,
@@ -14,14 +14,14 @@ const Form: React.FC<FormProps> = ({
 }) => {
     return (
         <div
-            className={`grid grid-cols-2 lg:grid-cols-10 w-[344px] lg:w-[732px] ${formStyle} bg-white rounded-lg h-full m-auto min-h-[188px] lg:min-h-[144px] mb-8 `}
+            className={`grid grid-cols-2 lg:grid-cols-10 ${formStyle} bg-white rounded-lg h-full m-auto min-h-[188px] lg:min-h-[144px] mb-8 `}
         >
             <form className="col-span-2 lg:col-span-7 lg:col-start-2">
                 <textarea
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
-                    className={`w-[312px] lg:w-[506px] ${textareaStyle} mx-4 mt-4 h-24 lg:mt-6 lg:mx-0 lg:ml-1 border-2 border-light-gray rounded-lg pl-6 pt-3`}
+                    className={` ${textareaStyle} mx-4 mt-4 h-24 lg:mt-6 lg:mx-0 lg:ml-1 border-2 border-light-gray rounded-lg pl-6 pt-3`}
                 />
             </form>
 
@@ -33,9 +33,9 @@ const Form: React.FC<FormProps> = ({
 
             <button
                 onClick={() => {
-                    onClick();
+                    addComment();
                 }}
-                className="col-span-1 lg:col-span-2 lg:col-start-9 bg-moderate-blue text-white w-24 h-12 ml-[60px] lg:ml-[20px] lg:mt-6 rounded-lg "
+                className="col-span-1 lg:col-span-2 lg:col-start-9 bg-moderate-blue hover:bg-light-grayish-blue text-white w-24 h-12 ml-[60px] lg:ml-[20px] lg:mt-6 rounded-lg"
             >
                 {button}
             </button>

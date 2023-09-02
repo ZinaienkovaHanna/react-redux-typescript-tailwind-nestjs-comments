@@ -37,8 +37,8 @@ export interface ItemProps {
     itemStyle?: string;
     buttonReplyStyle?: string;
     buttonDeleteStyle?: string;
-    deleteItemHandler: () => void;
-    onClickReply: () => void;
+    deleteItem: () => void;
+    addReply: () => void;
     // editHandler: () => void;
 }
 
@@ -46,7 +46,7 @@ export interface FormProps {
     button: string;
     placeholder?: string;
     currentUser: User;
-    onClick: () => void;
+    addComment: () => void;
     value: string;
     onChange: (
         e: React.ChangeEvent<

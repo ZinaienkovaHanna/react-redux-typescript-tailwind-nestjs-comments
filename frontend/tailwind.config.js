@@ -13,6 +13,7 @@ module.exports = {
                 'very-light-gray': '#F5F6FA',
                 'soft-red': '#ED6368',
                 'light-gray': '#E9EBF0',
+                'light-grayish-blue': '#C5C6EF',
             },
         },
     },

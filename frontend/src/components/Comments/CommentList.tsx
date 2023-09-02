@@ -72,19 +72,20 @@ const CommentList: React.FC = () => {
                     <Item
                         data={comment}
                         currentUser={currentUser}
-                        deleteItemHandler={() =>
-                            deleteCommentHandler(comment.id)
-                        }
-                        onClickReply={() => {
+                        deleteItem={() => deleteCommentHandler(comment.id)}
+                        addReply={() => {
                             setActiveReplyForm(comment.id);
                             setNewReply(`@${comment.user.username}`);
                         }}
+                        itemStyle="w-[344px] lg:w-[732px]"
+                        buttonReplyStyle="lg:pl-36"
+                        buttonDeleteStyle="pl-[26px] lg:pl-14"
                     />
                     {activeReplyForm === comment.id && (
                         <Form
                             currentUser={currentUser}
                             button="REPLY"
-                            onClick={() => {
+                            addComment={() => {
                                 addReplyHandler(
                                     comment.id,
                                     comment.user.username
@@ -93,6 +94,8 @@ const CommentList: React.FC = () => {
                             }}
                             value={newReply}
                             onChange={(e) => setNewReply(e.target.value)}
+                            formStyle="w-[344px] lg:w-[732px]"
+                            textareaStyle="w-[312px] lg:w-[506px]"
                         />
                     )}
 
@@ -107,23 +110,21 @@ const CommentList: React.FC = () => {
                                 content={
                                     <span className="font-bold text-moderate-blue">{`@${reply.replyingTo} `}</span>
                                 }
-                                itemStyle="w-[330px] lg:w-[658px] ml-3 lg:ml-9"
-                                buttonReplyStyle="lg:pl-[116px]"
-                                buttonDeleteStyle="pl-4 lg:pl-8"
-                                deleteItemHandler={() =>
-                                    deleteReplyHandler(reply.id)
-                                }
-                                onClickReply={() => {
+                                deleteItem={() => deleteReplyHandler(reply.id)}
+                                addReply={() => {
                                     setNewReply(`@${reply.user.username}`);
                                     setActiveReplyForm(reply.id);
                                 }}
+                                itemStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
+                                buttonReplyStyle="lg:pl-[116px]"
+                                buttonDeleteStyle="pl-4 lg:pl-8"
                             />
 
                             {activeReplyForm === reply.id && (
                                 <Form
                                     currentUser={currentUser}
                                     button="REPLY"
-                                    onClick={() => {
+                                    addComment={() => {
                                         addReplyHandler(
                                             comment.id,
                                             reply.user.username
@@ -135,7 +136,7 @@ const CommentList: React.FC = () => {
                                         setNewReply(e.target.value)
                                     }
                                     formStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
-                                    textareaStyle="lg:w-[460px]"
+                                    textareaStyle="w-[302px] lg:w-[460px]"
                                 />
                             )}
                         </div>
@@ -147,9 +148,11 @@ const CommentList: React.FC = () => {
                 currentUser={currentUser}
                 button="SEND"
                 placeholder="Add a comment…"
-                onClick={addCommentHandler}
+                addComment={addCommentHandler}
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
+                formStyle="w-[344px] lg:w-[732px] "
+                textareaStyle="w-[312px] lg:w-[506px]"
             />
         </div>
     );
