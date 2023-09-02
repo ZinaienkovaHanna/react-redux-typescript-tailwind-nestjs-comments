@@ -37,6 +37,9 @@ export interface ItemProps {
     itemStyle: string;
     buttonReplyStyle: string;
     buttonDeleteStyle: string;
+    addReplyHandler: () => void;
+    newReply: string;
+    setNewReply: any;
     deleteItemHandler: () => void;
     // editHandler: () => void;
 }
@@ -68,12 +71,21 @@ export enum CommentActionTypes {
     ADD_COMMENT = 'ADD_COMMENT',
     DELETE_COMMENT = 'DELETE_COMMENT',
     EDIT_COMMENT = 'EDIT_COMMENT',
+    ADD_REPLY = 'ADD_REPLY',
     DELETE_REPLY = 'DELETE_REPLY',
 }
 
 interface AddCommentAction {
     type: CommentActionTypes.ADD_COMMENT;
     payload: Comment;
+}
+
+interface AddReplyAction {
+    type: CommentActionTypes.ADD_REPLY;
+    payload: {
+        reply: Reply;
+        parentId: string;
+    };
 }
 
 interface DeleteCommentAction {
@@ -96,4 +108,5 @@ export type CommentAction =
     | AddCommentAction
     | DeleteCommentAction
     | EditCommentAction
-    | DeleteReplyAction;
+    | DeleteReplyAction
+    | AddReplyAction;

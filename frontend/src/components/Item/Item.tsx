@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import DeleteItemModal from './DeleteItemModal';
+import Form from '../Form/Form';
 import { formatDate } from '../../utils/utils';
 import { ItemProps } from '../../types/types';
 
@@ -12,6 +13,9 @@ const Item: React.FC<ItemProps> = ({
     itemStyle,
     buttonReplyStyle,
     buttonDeleteStyle,
+    addReplyHandler,
+    newReply,
+    setNewReply,
     deleteItemHandler,
     // editHandler,
 }) => {
@@ -20,6 +24,7 @@ const Item: React.FC<ItemProps> = ({
         data.user.username === currentUser.username
     );
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [showReplyForm, setShowReplyForm] = useState(false);
 
     return (
         <>
@@ -32,11 +37,16 @@ const Item: React.FC<ItemProps> = ({
                     className="col-span-1 w-8 h-8 lg:ml-2"
                 />
 
-                <p className="col-span-2 font-bold text-dark-blue flex items-center">
-                    {data.user.username}
+                <p className="col-span-3 font-bold text-dark-blue flex items-center">
+                    {data.user.username}{' '}
+                    {isCurrentUserComment && (
+                        <span className="ml-2 text-xs text-white bg-moderate-blue w-9 h-5 rounded-sm flex items-center justify-center">
+                            you
+                        </span>
+                    )}
                 </p>
 
-                <p className="col-span-4 pl-12  text-grayish-blue flex items-center">
+                <p className="col-span-3 pl-4  text-grayish-blue flex items-center">
                     {formatDate(data.createdAt)}
                 </p>
 
@@ -92,6 +102,7 @@ const Item: React.FC<ItemProps> = ({
                     ) : (
                         <button
                             className={`flex items-center pl-24 ${buttonReplyStyle}`}
+                            onClick={() => setShowReplyForm(true)}
                         >
                             <img
                                 src="images/icons/icon-reply.svg"
@@ -105,6 +116,20 @@ const Item: React.FC<ItemProps> = ({
                     )}
                 </div>
             </div>
+
+            {showReplyForm && (
+                <Form
+                    currentUser={currentUser}
+                    button="REPLY"
+                    placeholder="Add a reply…"
+                    onClick={() => {
+                        addReplyHandler();
+                        setShowReplyForm(false);
+                    }}
+                    value={newReply}
+                    onChange={(e) => setNewReply(e.target.value)}
+                />
+            )}
 
             {showDeleteModal && (
                 <DeleteItemModal

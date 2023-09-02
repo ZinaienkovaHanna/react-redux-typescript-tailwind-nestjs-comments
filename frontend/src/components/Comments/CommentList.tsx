@@ -1,11 +1,13 @@
 //src/Comments/CommentList
 
-import React from 'react';
+import { useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import Item from '../Item/Item';
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useDispatch } from 'react-redux';
 import {
+    addReplyAction,
     deleteCommentAction,
     deleteReplyAction,
 } from '../../store/actions/commentActions';
@@ -16,9 +18,24 @@ const CommentList: React.FC = () => {
     const { comments, currentUser } = useTypedSelector(
         (state) => state.commentsData
     );
+    const [newReply, setNewReply] = useState('');
     const dispatch = useDispatch();
 
     console.log(comments);
+
+    const addReplyHandler = (parentId: string, replyingTo: string) => {
+        const newReplyData = {
+            id: uuidv4(),
+            content: newReply,
+            createdAt: new Date().toISOString(),
+            score: 0,
+            replyingTo: replyingTo,
+            user: currentUser,
+        };
+
+        dispatch(addReplyAction(newReplyData, parentId));
+        setNewReply('');
+    };
 
     const deleteCommentHandler = (id: string) => {
         dispatch(deleteCommentAction(id));
@@ -41,6 +58,11 @@ const CommentList: React.FC = () => {
                         deleteItemHandler={() =>
                             deleteCommentHandler(comment.id)
                         }
+                        addReplyHandler={() =>
+                            addReplyHandler(comment.id, comment.user.username)
+                        }
+                        newReply={newReply}
+                        setNewReply={setNewReply}
                     />
                     {comment.replies.map((reply: Reply) => (
                         <div
@@ -59,6 +81,14 @@ const CommentList: React.FC = () => {
                                 deleteItemHandler={() =>
                                     deleteReplyHandler(reply.id)
                                 }
+                                addReplyHandler={() =>
+                                    addReplyHandler(
+                                        comment.id,
+                                        reply.user.username
+                                    )
+                                }
+                                newReply={newReply}
+                                setNewReply={setNewReply}
                             />
                         </div>
                     ))}

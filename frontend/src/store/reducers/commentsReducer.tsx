@@ -29,6 +29,21 @@ const commentsReducer = (state = initialState, action: CommentAction) => {
                 ),
             };
 
+        case CommentActionTypes.ADD_REPLY:
+            return {
+                ...state,
+                comments: state.comments.map((comment) => {
+                    if (comment.id === action.payload.parentId) {
+                        return {
+                            ...comment,
+                            replies: [...comment.replies, action.payload.reply],
+                        };
+                    } else {
+                        return comment;
+                    }
+                }),
+            };
+
         case CommentActionTypes.DELETE_REPLY:
             return {
                 ...state,

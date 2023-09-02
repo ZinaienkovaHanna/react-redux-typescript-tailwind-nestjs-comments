@@ -29,8 +29,7 @@ const Form: React.FC<FormProps> = ({
 
             <button
                 onClick={() => {
-                    console.log('Button clicked inside Form component');
-                    onClick(); // Виклик переданої функції
+                    onClick();
                 }}
                 className="col-span-1 lg:col-span-2 lg:col-start-9 bg-moderate-blue text-white w-24 h-12 ml-[60px] lg:ml-[20px] lg:mt-6 rounded-lg "
             >
