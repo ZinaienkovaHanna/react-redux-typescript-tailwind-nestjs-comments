@@ -37,16 +37,14 @@ export interface ItemProps {
     itemStyle: string;
     buttonReplyStyle: string;
     buttonDeleteStyle: string;
-    addReplyHandler: () => void;
-    newReply: string;
-    setNewReply: any;
     deleteItemHandler: () => void;
+    onClickReply: () => void;
     // editHandler: () => void;
 }
 
 export interface FormProps {
     button: string;
-    placeholder: string;
+    placeholder?: string;
     currentUser: User;
     onClick: () => void;
     value: string;
@@ -55,6 +53,8 @@ export interface FormProps {
             HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
         >
     ) => void;
+    formStyle?: string;
+    textareaStyle?: string;
 }
 
 //store

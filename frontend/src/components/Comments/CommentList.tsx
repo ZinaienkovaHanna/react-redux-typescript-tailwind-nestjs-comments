@@ -4,6 +4,8 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import Item from '../Item/Item';
+import Form from '../Form/Form';
+
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useDispatch } from 'react-redux';
 import {
@@ -18,7 +20,8 @@ const CommentList: React.FC = () => {
     const { comments, currentUser } = useTypedSelector(
         (state) => state.commentsData
     );
-    const [newReply, setNewReply] = useState('');
+    const [newReply, setNewReply] = useState('qqqqqq');
+    const [activeReplyForm, setActiveReplyForm] = useState<string | null>(null);
     const dispatch = useDispatch();
 
     console.log(comments);
@@ -58,12 +61,27 @@ const CommentList: React.FC = () => {
                         deleteItemHandler={() =>
                             deleteCommentHandler(comment.id)
                         }
-                        addReplyHandler={() =>
-                            addReplyHandler(comment.id, comment.user.username)
-                        }
-                        newReply={newReply}
-                        setNewReply={setNewReply}
+                        onClickReply={() => {
+                            setActiveReplyForm(comment.id);
+                            setNewReply(`@${comment.user.username}`);
+                        }}
                     />
+                    {activeReplyForm === comment.id && (
+                        <Form
+                            currentUser={currentUser}
+                            button="REPLY"
+                            onClick={() => {
+                                addReplyHandler(
+                                    comment.id,
+                                    comment.user.username
+                                );
+                                setActiveReplyForm(null);
+                            }}
+                            value={newReply}
+                            onChange={(e) => setNewReply(e.target.value)}
+                        />
+                    )}
+
                     {comment.replies.map((reply: Reply) => (
                         <div
                             key={reply.id}
@@ -81,15 +99,31 @@ const CommentList: React.FC = () => {
                                 deleteItemHandler={() =>
                                     deleteReplyHandler(reply.id)
                                 }
-                                addReplyHandler={() =>
-                                    addReplyHandler(
-                                        comment.id,
-                                        reply.user.username
-                                    )
-                                }
-                                newReply={newReply}
-                                setNewReply={setNewReply}
+                                onClickReply={() => {
+                                    setNewReply(`@${reply.user.username}`);
+                                    setActiveReplyForm(reply.id);
+                                }}
                             />
+
+                            {activeReplyForm === reply.id && (
+                                <Form
+                                    currentUser={currentUser}
+                                    button="REPLY"
+                                    onClick={() => {
+                                        addReplyHandler(
+                                            comment.id,
+                                            reply.user.username
+                                        );
+                                        setActiveReplyForm(null);
+                                    }}
+                                    value={newReply}
+                                    onChange={(e) =>
+                                        setNewReply(e.target.value)
+                                    }
+                                    formStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
+                                    textareaStyle="lg:w-[460px]"
+                                />
+                            )}
                         </div>
                     ))}
                 </div>

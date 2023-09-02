@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import DeleteItemModal from './DeleteItemModal';
-import Form from '../Form/Form';
 import { formatDate } from '../../utils/utils';
 import { ItemProps } from '../../types/types';
 
@@ -13,9 +12,7 @@ const Item: React.FC<ItemProps> = ({
     itemStyle,
     buttonReplyStyle,
     buttonDeleteStyle,
-    addReplyHandler,
-    newReply,
-    setNewReply,
+    onClickReply,
     deleteItemHandler,
     // editHandler,
 }) => {
@@ -24,7 +21,6 @@ const Item: React.FC<ItemProps> = ({
         data.user.username === currentUser.username
     );
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [showReplyForm, setShowReplyForm] = useState(false);
 
     return (
         <>
@@ -102,7 +98,7 @@ const Item: React.FC<ItemProps> = ({
                     ) : (
                         <button
                             className={`flex items-center pl-24 ${buttonReplyStyle}`}
-                            onClick={() => setShowReplyForm(true)}
+                            onClick={onClickReply}
                         >
                             <img
                                 src="images/icons/icon-reply.svg"
@@ -116,20 +112,6 @@ const Item: React.FC<ItemProps> = ({
                     )}
                 </div>
             </div>
-
-            {showReplyForm && (
-                <Form
-                    currentUser={currentUser}
-                    button="REPLY"
-                    placeholder="Add a reply…"
-                    onClick={() => {
-                        addReplyHandler();
-                        setShowReplyForm(false);
-                    }}
-                    value={newReply}
-                    onChange={(e) => setNewReply(e.target.value)}
-                />
-            )}
 
             {showDeleteModal && (
                 <DeleteItemModal
