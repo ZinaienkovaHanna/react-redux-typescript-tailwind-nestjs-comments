@@ -34,9 +34,9 @@ export interface ItemProps {
     data: any;
     currentUser: User;
     content?: React.ReactNode;
-    itemStyle: string;
-    buttonReplyStyle: string;
-    buttonDeleteStyle: string;
+    itemStyle?: string;
+    buttonReplyStyle?: string;
+    buttonDeleteStyle?: string;
     deleteItemHandler: () => void;
     onClickReply: () => void;
     // editHandler: () => void;

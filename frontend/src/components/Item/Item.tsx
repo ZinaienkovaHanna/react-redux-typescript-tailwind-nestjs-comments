@@ -25,7 +25,7 @@ const Item: React.FC<ItemProps> = ({
     return (
         <>
             <div
-                className={`grid grid-cols-7 lg:grid-cols-12 gap-x-1 gap-y-4 grid-flow-row bg-white rounded-lg h-full m-auto p-4 my-4 ${itemStyle}`}
+                className={`grid grid-cols-7 lg:grid-cols-12 gap-x-1 gap-y-4 grid-flow-row bg-white rounded-lg h-full m-auto p-4 my-4 w-[344px] lg:w-[732px] ${itemStyle}`}
             >
                 <img
                     src={data.user.image.png}
@@ -70,7 +70,7 @@ const Item: React.FC<ItemProps> = ({
                         <>
                             <button
                                 onClick={() => setShowDeleteModal(true)}
-                                className={`flex items-center pl-4 lg:pl-8 ${buttonDeleteStyle}`}
+                                className={`flex items-center pl-[26px] lg:pl-14  ${buttonDeleteStyle}`}
                             >
                                 <img
                                     src="images/icons/icon-delete.svg"
@@ -97,7 +97,7 @@ const Item: React.FC<ItemProps> = ({
                         </>
                     ) : (
                         <button
-                            className={`flex items-center pl-24 ${buttonReplyStyle}`}
+                            className={`flex items-center pl-24 lg:pl-36 ${buttonReplyStyle}`}
                             onClick={onClickReply}
                         >
                             <img

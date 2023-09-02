@@ -3,16 +3,17 @@
 import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-import Item from '../Item/Item';
-import Form from '../Form/Form';
-
 import { useTypedSelector } from '../../hooks/useTypedSelector';
 import { useDispatch } from 'react-redux';
 import {
+    addCommentAction,
     addReplyAction,
     deleteCommentAction,
     deleteReplyAction,
 } from '../../store/actions/commentActions';
+
+import Item from '../Item/Item';
+import Form from '../Form/Form';
 
 import { Comment, Reply } from '../../types/types';
 
@@ -20,11 +21,27 @@ const CommentList: React.FC = () => {
     const { comments, currentUser } = useTypedSelector(
         (state) => state.commentsData
     );
-    const [newReply, setNewReply] = useState('qqqqqq');
-    const [activeReplyForm, setActiveReplyForm] = useState<string | null>(null);
     const dispatch = useDispatch();
 
+    const [newComment, setNewComment] = useState('');
+    const [newReply, setNewReply] = useState('');
+    const [activeReplyForm, setActiveReplyForm] = useState<string | null>(null);
+
     console.log(comments);
+
+    const addCommentHandler = () => {
+        const newCommentData = {
+            id: uuidv4(),
+            content: newComment,
+            createdAt: new Date().toISOString(),
+            score: 0,
+            user: currentUser,
+            replies: [],
+        };
+
+        dispatch(addCommentAction(newCommentData));
+        setNewComment('');
+    };
 
     const addReplyHandler = (parentId: string, replyingTo: string) => {
         const newReplyData = {
@@ -55,9 +72,6 @@ const CommentList: React.FC = () => {
                     <Item
                         data={comment}
                         currentUser={currentUser}
-                        itemStyle="w-[344px] lg:w-[732px]"
-                        buttonReplyStyle="lg:pl-36"
-                        buttonDeleteStyle="pl-[26px] lg:pl-14"
                         deleteItemHandler={() =>
                             deleteCommentHandler(comment.id)
                         }
@@ -93,7 +107,7 @@ const CommentList: React.FC = () => {
                                 content={
                                     <span className="font-bold text-moderate-blue">{`@${reply.replyingTo} `}</span>
                                 }
-                                itemStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
+                                itemStyle="w-[330px] lg:w-[658px] ml-3 lg:ml-9"
                                 buttonReplyStyle="lg:pl-[116px]"
                                 buttonDeleteStyle="pl-4 lg:pl-8"
                                 deleteItemHandler={() =>
@@ -128,6 +142,15 @@ const CommentList: React.FC = () => {
                     ))}
                 </div>
             ))}
+
+            <Form
+                currentUser={currentUser}
+                button="SEND"
+                placeholder="Add a comment…"
+                onClick={addCommentHandler}
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+            />
         </div>
     );
 };
