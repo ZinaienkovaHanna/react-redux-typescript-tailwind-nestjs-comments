@@ -9,15 +9,19 @@ const Item: React.FC<ItemProps> = ({
     data,
     currentUser,
     content,
+    addReply,
+    deleteItem,
+    saveEditedItem,
     itemStyle,
     buttonReplyStyle,
     buttonDeleteStyle,
-    addReply,
-    deleteItem,
-    // editHandler,
+    textareaEditStyle,
+    buttonEditStyle,
 }) => {
     const [score, setScore] = useState(data.score);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isEditMode, setIsEditMode] = useState(false);
+    const [editedContent, setEditedContent] = useState(data.content);
 
     return (
         <>
@@ -43,10 +47,29 @@ const Item: React.FC<ItemProps> = ({
                     {formatDate(data.createdAt)}
                 </p>
 
-                <p className="col-span-7 lg:col-span-11 lg:col-start-2 text-grayish-blue lg:px-2 break-words">
-                    {content}
-                    {data.content}
-                </p>
+                {isEditMode ? (
+                    <>
+                        <textarea
+                            value={editedContent}
+                            onChange={(e) => setEditedContent(e.target.value)}
+                            className={`${textareaEditStyle} col-span-7 lg:col-span-11 lg:col-start-2 h-48 lg:h-28 border-2 border-light-gray rounded-lg p-3 `}
+                        />
+                        <button
+                            onClick={() => {
+                                saveEditedItem(editedContent);
+                                setIsEditMode(false);
+                            }}
+                            className={`col-span-2 lg:col-span-4 row-start-4 col-start-5 lg:col-start-9 lg:row-start-3 bg-moderate-blue hover:bg-light-grayish-blue text-white w-24 h-12 rounded-lg ${buttonEditStyle}`}
+                        >
+                            UPDATE
+                        </button>
+                    </>
+                ) : (
+                    <p className="col-span-7 lg:col-span-11 lg:col-start-2 text-grayish-blue lg:px-2 break-words">
+                        {content}
+                        {data.content}
+                    </p>
+                )}
 
                 <div className="col-span-3 lg:col-span-1 lg:col-start-1 lg:row-start-1 lg:row-span-2 flex lg:flex-col items-center justify-around w-24 h-10 lg:w-10 lg:h-24 bg-very-light-gray rounded-lg">
                     <button onClick={() => setScore(score + 1)}>
@@ -62,7 +85,7 @@ const Item: React.FC<ItemProps> = ({
                     </button>
                 </div>
 
-                <div className="col-span-4 lg:col-span-4 lg:col-start-9 lg:row-start-1 flex justify-between items-center ">
+                <div className="col-span-4 lg:col-span-4 lg:col-start-9 lg:row-start-1 flex justify-between items-center">
                     {data.user.username === currentUser.username ? (
                         <>
                             <button
@@ -77,7 +100,7 @@ const Item: React.FC<ItemProps> = ({
                                 <span className="font-bold ">Delete</span>
                             </button>
                             <button
-                                // onClick={editHandler}
+                                onClick={() => setIsEditMode(true)}
                                 className={`flex items-center text-moderate-blue hover:opacity-50 pr-3 lg:pr-6`}
                             >
                                 <img

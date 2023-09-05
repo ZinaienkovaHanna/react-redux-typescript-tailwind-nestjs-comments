@@ -10,6 +10,8 @@ import {
     addReplyAction,
     deleteCommentAction,
     deleteReplyAction,
+    editCommentAction,
+    editReplyAction,
 } from '../../store/actions/commentActions';
 
 import Item from '../Item/Item';
@@ -17,7 +19,7 @@ import Form from '../Form/Form';
 
 import { Comment, Reply } from '../../types/types';
 
-const CommentList: React.FC = () => {
+const CommentsList: React.FC = () => {
     const { comments, currentUser } = useTypedSelector(
         (state) => state.commentsData
     );
@@ -57,6 +59,18 @@ const CommentList: React.FC = () => {
         setNewReply('');
     };
 
+    const editedCommentHandler = (id: string, newContent: string) => {
+        dispatch(editCommentAction(newContent, id));
+    };
+
+    const editedReplyHandler = (
+        commentId: string,
+        replyId: string,
+        newContent: string
+    ) => {
+        dispatch(editReplyAction(commentId, replyId, newContent));
+    };
+
     const deleteCommentHandler = (id: string) => {
         dispatch(deleteCommentAction(id));
     };
@@ -72,20 +86,26 @@ const CommentList: React.FC = () => {
                     <Item
                         data={comment}
                         currentUser={currentUser}
-                        deleteItem={() => deleteCommentHandler(comment.id)}
                         addReply={() => {
                             setActiveReplyForm(comment.id);
                             setNewReply(`@${comment.user.username}`);
                         }}
+                        saveEditedItem={(newContent: string) =>
+                            editedCommentHandler(comment.id, newContent)
+                        }
+                        deleteItem={() => deleteCommentHandler(comment.id)}
                         itemStyle="w-[344px] lg:w-[732px]"
                         buttonReplyStyle="lg:pl-36"
                         buttonDeleteStyle="pl-[26px] lg:pl-14"
+                        textareaEditStyle="w-[312px] lg:w-[626px]"
+                        buttonEditStyle="ml-9 lg:ml-[120px]"
                     />
+
                     {activeReplyForm === comment.id && (
                         <Form
                             currentUser={currentUser}
                             button="REPLY"
-                            addComment={() => {
+                            onClick={() => {
                                 addReplyHandler(
                                     comment.id,
                                     comment.user.username
@@ -115,16 +135,25 @@ const CommentList: React.FC = () => {
                                     setNewReply(`@${reply.user.username}`);
                                     setActiveReplyForm(reply.id);
                                 }}
+                                saveEditedItem={(newContent: string) =>
+                                    editedReplyHandler(
+                                        comment.id,
+                                        reply.id,
+                                        newContent
+                                    )
+                                }
                                 itemStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
                                 buttonReplyStyle="lg:pl-[116px]"
                                 buttonDeleteStyle="pl-4 lg:pl-8"
+                                textareaEditStyle="w-[302px] lg:w-[560px]"
+                                buttonEditStyle="ml-8 lg:ml-24"
                             />
 
                             {activeReplyForm === reply.id && (
                                 <Form
                                     currentUser={currentUser}
                                     button="REPLY"
-                                    addComment={() => {
+                                    onClick={() => {
                                         addReplyHandler(
                                             comment.id,
                                             reply.user.username
@@ -148,7 +177,7 @@ const CommentList: React.FC = () => {
                 currentUser={currentUser}
                 button="SEND"
                 placeholder="Add a comment…"
-                addComment={addCommentHandler}
+                onClick={addCommentHandler}
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 formStyle="w-[344px] lg:w-[732px] "
@@ -158,4 +187,4 @@ const CommentList: React.FC = () => {
     );
 };
 
-export default CommentList;
+export default CommentsList;

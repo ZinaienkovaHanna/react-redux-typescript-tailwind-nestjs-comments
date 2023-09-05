@@ -23,6 +23,24 @@ export const addReplyAction = (reply: Reply, parentId: string) => {
     };
 };
 
+export const editCommentAction = (content: string, id: string) => {
+    return {
+        type: CommentActionTypes.EDIT_COMMENT,
+        payload: { content, id },
+    };
+};
+
+export const editReplyAction = (
+    commentId: string,
+    replyId: string,
+    content: string
+) => {
+    return {
+        type: CommentActionTypes.EDIT_REPLY,
+        payload: { commentId, replyId, content },
+    };
+};
+
 export const deleteReplyAction = (id: string) => {
     return {
         type: CommentActionTypes.DELETE_REPLY,

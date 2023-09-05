@@ -39,14 +39,16 @@ export interface ItemProps {
     buttonDeleteStyle?: string;
     deleteItem: () => void;
     addReply: () => void;
-    // editHandler: () => void;
+    saveEditedItem: (newContent: string) => void;
+    textareaEditStyle: string;
+    buttonEditStyle: string;
 }
 
 export interface FormProps {
     button: string;
     placeholder?: string;
     currentUser: User;
-    addComment: () => void;
+    onClick: () => void;
     value: string;
     onChange: (
         e: React.ChangeEvent<
@@ -55,6 +57,7 @@ export interface FormProps {
     ) => void;
     formStyle?: string;
     textareaStyle?: string;
+    defaultValue?: string;
 }
 
 //store
@@ -73,6 +76,7 @@ export enum CommentActionTypes {
     EDIT_COMMENT = 'EDIT_COMMENT',
     ADD_REPLY = 'ADD_REPLY',
     DELETE_REPLY = 'DELETE_REPLY',
+    EDIT_REPLY = 'EDIT_REPLY',
 }
 
 interface AddCommentAction {
@@ -100,13 +104,25 @@ interface DeleteReplyAction {
 
 interface EditCommentAction {
     type: CommentActionTypes.EDIT_COMMENT;
-    id: string | number;
-    payload: Comment[];
+    payload: {
+        content: string;
+        id: string;
+    };
+}
+
+interface EditReplyAction {
+    type: CommentActionTypes.EDIT_REPLY;
+    payload: {
+        content: string;
+        commentId: string;
+        replyId: string;
+    };
 }
 
 export type CommentAction =
     | AddCommentAction
     | DeleteCommentAction
     | EditCommentAction
-    | DeleteReplyAction
-    | AddReplyAction;
+    | AddReplyAction
+    | EditReplyAction
+    | DeleteReplyAction;
