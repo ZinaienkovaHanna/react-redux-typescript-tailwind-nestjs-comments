@@ -15,7 +15,7 @@ export interface User {
 export interface Reply {
     id: string;
     content: string;
-    createdAt: string;
+    createdAt: string | Date;
     score: number;
     replyingTo: string;
     user: User;
@@ -24,7 +24,7 @@ export interface Reply {
 export interface Comment {
     id: string;
     content: string;
-    createdAt: string;
+    createdAt: string | Date;
     score: number;
     user: User;
     replies: Reply[];
@@ -42,6 +42,9 @@ export interface ItemProps {
     saveEditedItem: (newContent: string) => void;
     textareaEditStyle: string;
     buttonEditStyle: string;
+    setActiveEditForm: () => void;
+    activeEditForm: null | string;
+    error: null | string;
 }
 
 export interface FormProps {
@@ -57,7 +60,7 @@ export interface FormProps {
     ) => void;
     formStyle?: string;
     textareaStyle?: string;
-    defaultValue?: string;
+    error?: string | null;
 }
 
 //store

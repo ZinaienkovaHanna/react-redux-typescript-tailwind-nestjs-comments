@@ -13,6 +13,11 @@ import {
     editCommentAction,
     editReplyAction,
 } from '../../store/actions/commentActions';
+import {
+    newCommentSchema,
+    newReplySchema,
+    editSchema,
+} from '../../validation/validationSchemes';
 
 import Item from '../Item/Item';
 import Form from '../Form/Form';
@@ -27,7 +32,12 @@ const CommentsList: React.FC = () => {
 
     const [newComment, setNewComment] = useState('');
     const [newReply, setNewReply] = useState('');
-    const [activeReplyForm, setActiveReplyForm] = useState<string | null>(null);
+    const [activeReplyForm, setActiveReplyForm] = useState<null | string>(null);
+    const [activeEditForm, setActiveEditForm] = useState<null | string>(null);
+
+    const [validationErrorComment, setValidationErrorComment] = useState(null);
+    const [validationErrorReply, setValidationErrorReply] = useState(null);
+    const [validationErrorEdit, setValidationErrorEdit] = useState(null);
 
     console.log(comments);
 
@@ -41,8 +51,17 @@ const CommentsList: React.FC = () => {
             replies: [],
         };
 
-        dispatch(addCommentAction(newCommentData));
-        setNewComment('');
+        newCommentSchema
+            .validate(newCommentData)
+            .then((validComment) => {
+                dispatch(addCommentAction(validComment));
+                setNewComment('');
+                setValidationErrorComment(null);
+            })
+            .catch((validationError) => {
+                console.error('Validation Error:', validationError);
+                setValidationErrorComment(validationError.message);
+            });
     };
 
     const addReplyHandler = (parentId: string, replyingTo: string) => {
@@ -55,12 +74,31 @@ const CommentsList: React.FC = () => {
             user: currentUser,
         };
 
-        dispatch(addReplyAction(newReplyData, parentId));
-        setNewReply('');
+        newReplySchema
+            .validate(newReplyData)
+            .then((validReply) => {
+                dispatch(addReplyAction(validReply, parentId));
+                setNewReply('');
+                setValidationErrorReply(null);
+                setActiveReplyForm(null);
+            })
+            .catch((validationError) => {
+                console.error('Validation Error:', validationError);
+                setValidationErrorReply(validationError.message);
+            });
     };
 
     const editedCommentHandler = (id: string, newContent: string) => {
-        dispatch(editCommentAction(newContent, id));
+        editSchema
+            .validate({ content: newContent })
+            .then((validContent) => {
+                dispatch(editCommentAction(validContent.content, id));
+                setActiveEditForm(null);
+            })
+            .catch((validationError) => {
+                console.error('Validation Error:', validationError);
+                setValidationErrorEdit(validationError.message);
+            });
     };
 
     const editedReplyHandler = (
@@ -68,7 +106,18 @@ const CommentsList: React.FC = () => {
         replyId: string,
         newContent: string
     ) => {
-        dispatch(editReplyAction(commentId, replyId, newContent));
+        editSchema
+            .validate({ content: newContent })
+            .then((validContent) => {
+                dispatch(
+                    editReplyAction(commentId, replyId, validContent.content)
+                );
+                setActiveEditForm(null);
+            })
+            .catch((validationError) => {
+                console.error('Validation Error', validationError);
+                setValidationErrorEdit(validationError.message);
+            });
     };
 
     const deleteCommentHandler = (id: string) => {
@@ -88,11 +137,13 @@ const CommentsList: React.FC = () => {
                         currentUser={currentUser}
                         addReply={() => {
                             setActiveReplyForm(comment.id);
-                            setNewReply(`@${comment.user.username}`);
                         }}
+                        setActiveEditForm={() => setActiveEditForm(comment.id)}
+                        activeEditForm={activeEditForm}
                         saveEditedItem={(newContent: string) =>
                             editedCommentHandler(comment.id, newContent)
                         }
+                        error={validationErrorEdit}
                         deleteItem={() => deleteCommentHandler(comment.id)}
                         itemStyle="w-[344px] lg:w-[732px]"
                         buttonReplyStyle="lg:pl-36"
@@ -105,17 +156,18 @@ const CommentsList: React.FC = () => {
                         <Form
                             currentUser={currentUser}
                             button="REPLY"
-                            onClick={() => {
+                            placeholder={`@${comment.user.username}`}
+                            onClick={() =>
                                 addReplyHandler(
                                     comment.id,
                                     comment.user.username
-                                );
-                                setActiveReplyForm(null);
-                            }}
+                                )
+                            }
                             value={newReply}
                             onChange={(e) => setNewReply(e.target.value)}
                             formStyle="w-[344px] lg:w-[732px]"
                             textareaStyle="w-[312px] lg:w-[506px]"
+                            error={validationErrorReply}
                         />
                     )}
 
@@ -132,7 +184,6 @@ const CommentsList: React.FC = () => {
                                 }
                                 deleteItem={() => deleteReplyHandler(reply.id)}
                                 addReply={() => {
-                                    setNewReply(`@${reply.user.username}`);
                                     setActiveReplyForm(reply.id);
                                 }}
                                 saveEditedItem={(newContent: string) =>
@@ -142,6 +193,11 @@ const CommentsList: React.FC = () => {
                                         newContent
                                     )
                                 }
+                                setActiveEditForm={() =>
+                                    setActiveEditForm(reply.id)
+                                }
+                                activeEditForm={activeEditForm}
+                                error={validationErrorEdit}
                                 itemStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
                                 buttonReplyStyle="lg:pl-[116px]"
                                 buttonDeleteStyle="pl-4 lg:pl-8"
@@ -153,19 +209,20 @@ const CommentsList: React.FC = () => {
                                 <Form
                                     currentUser={currentUser}
                                     button="REPLY"
-                                    onClick={() => {
+                                    placeholder={`@${reply.user.username}`}
+                                    onClick={() =>
                                         addReplyHandler(
                                             comment.id,
                                             reply.user.username
-                                        );
-                                        setActiveReplyForm(null);
-                                    }}
+                                        )
+                                    }
                                     value={newReply}
                                     onChange={(e) =>
                                         setNewReply(e.target.value)
                                     }
                                     formStyle="w-[332px] lg:w-[660px] ml-3 lg:ml-9"
                                     textareaStyle="w-[302px] lg:w-[460px]"
+                                    error={validationErrorReply}
                                 />
                             )}
                         </div>
@@ -182,6 +239,7 @@ const CommentsList: React.FC = () => {
                 onChange={(e) => setNewComment(e.target.value)}
                 formStyle="w-[344px] lg:w-[732px] "
                 textareaStyle="w-[312px] lg:w-[506px]"
+                error={validationErrorComment}
             />
         </div>
     );

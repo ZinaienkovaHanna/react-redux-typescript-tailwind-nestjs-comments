@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { FormProps } from '../../types/types';
 
 const Form: React.FC<FormProps> = ({
@@ -9,9 +7,9 @@ const Form: React.FC<FormProps> = ({
     onClick,
     value,
     onChange,
-    defaultValue,
     formStyle,
     textareaStyle,
+    error,
 }) => {
     return (
         <div
@@ -22,16 +20,17 @@ const Form: React.FC<FormProps> = ({
                     placeholder={placeholder}
                     value={value}
                     onChange={onChange}
-                    className={` ${textareaStyle} border-2 border-light-gray rounded-lg p-3 `}
+                    className={` ${textareaStyle} min-h-min border-2 border-light-gray rounded-lg p-3 ${
+                        error ? 'border-2 border-soft-red' : ''
+                    }`}
                 />
+                {error && <p className="text-soft-red text-xs">{error}</p>}
             </form>
-
             <img
                 src={currentUser.image.png}
                 alt={currentUser.username}
                 className="col-span-1 lg:col-start-1 lg:row-start-1 w-8 h-8 ml-4 mt-2 lg:ml-6 lg:mt-6"
             />
-
             <button
                 onClick={() => {
                     onClick();

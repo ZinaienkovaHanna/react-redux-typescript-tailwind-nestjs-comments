@@ -12,6 +12,9 @@ const Item: React.FC<ItemProps> = ({
     addReply,
     deleteItem,
     saveEditedItem,
+    setActiveEditForm,
+    error,
+    activeEditForm,
     itemStyle,
     buttonReplyStyle,
     buttonDeleteStyle,
@@ -20,7 +23,6 @@ const Item: React.FC<ItemProps> = ({
 }) => {
     const [score, setScore] = useState(data.score);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
     const [editedContent, setEditedContent] = useState(data.content);
 
     return (
@@ -47,17 +49,19 @@ const Item: React.FC<ItemProps> = ({
                     {formatDate(data.createdAt)}
                 </p>
 
-                {isEditMode ? (
+                {activeEditForm === data.id ? (
                     <>
                         <textarea
                             value={editedContent}
                             onChange={(e) => setEditedContent(e.target.value)}
-                            className={`${textareaEditStyle} col-span-7 lg:col-span-11 lg:col-start-2 h-48 lg:h-28 border-2 border-light-gray rounded-lg p-3 `}
+                            className={`${textareaEditStyle} col-span-7 lg:col-span-11 lg:col-start-2 h-48 lg:h-28 border-2 border-light-gray rounded-lg p-3 ${
+                                error ? 'border-2 border-soft-red' : ''
+                            }`}
                         />
+
                         <button
                             onClick={() => {
                                 saveEditedItem(editedContent);
-                                setIsEditMode(false);
                             }}
                             className={`col-span-2 lg:col-span-4 row-start-4 col-start-5 lg:col-start-9 lg:row-start-3 bg-moderate-blue hover:bg-light-grayish-blue text-white w-24 h-12 rounded-lg ${buttonEditStyle}`}
                         >
@@ -100,7 +104,7 @@ const Item: React.FC<ItemProps> = ({
                                 <span className="font-bold ">Delete</span>
                             </button>
                             <button
-                                onClick={() => setIsEditMode(true)}
+                                onClick={setActiveEditForm}
                                 className={`flex items-center text-moderate-blue hover:opacity-50 pr-3 lg:pr-6`}
                             >
                                 <img
