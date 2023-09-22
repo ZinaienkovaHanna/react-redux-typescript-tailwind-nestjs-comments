@@ -1,31 +1,55 @@
-interface UserImage {
-    png: string;
-    webp: string;
-}
-interface User {
-    image: UserImage;
+import { Request, Response } from 'express';
+import { Document } from 'mongoose';
+
+export type RequestType = Request;
+export type ResponseType = Response;
+
+interface UserType {
+    image: {
+        png: string;
+        webp: string;
+    };
     username: string;
 }
 
-interface Reply {
+interface ReplyType {
     id?: string;
     content: string;
     createdAt: string | Date;
     score: number;
     replyingTo: string;
-    user: User;
+    user: UserType;
 }
 
-interface Comment {
+export interface CommentType {
     id?: string;
     content: string;
     createdAt: string | Date;
     score: number;
-    user: User;
-    replies: Reply[];
+    user: UserType;
+    replies: ReplyType[];
 }
 
-export interface CommentsType {
-    currentUser: User;
-    comments: Comment[];
+export interface UserDocument extends Document {
+    image: {
+        png: string;
+        webp: string;
+    };
+    username: string;
+}
+
+export interface ReplyDocument extends Document {
+    content: string;
+    createdAt: Date;
+    score: number;
+    user: UserDocument;
+    replyingTo: string;
+}
+
+export interface CommentDocument extends Document {
+    content: string;
+    createdAt: Date;
+    score: number;
+    user: UserDocument;
+    replies: ReplyDocument[];
 }

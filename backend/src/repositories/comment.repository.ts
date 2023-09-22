@@ -1,12 +1,36 @@
-import { Comments } from '../models/comment.model.ts';
-import { CommentsType } from '../types/comment.types.ts';
+// src/repositories/comment.repository.ts
+import { Comment } from '../models/comment.model.ts';
+import { CommentType } from '../types/comment.types.ts';
 
-export async function getCommentsFromDB(): Promise<CommentsType | null> {
+export async function getCommentsFromDB(): Promise<CommentType[]> {
     try {
-        const data = await Comments.findOne().exec();
-        console.log(data);
-        return data as CommentsType | null;
-    } catch (error) {
-        throw new Error('Error getting comments');
+        return await Comment.find().exec();
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error getting data');
+    }
+}
+
+export async function getCommentFromDB(
+    id: string
+): Promise<CommentType | null> {
+    try {
+        return await Comment.findById(id).exec();
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error getting comment');
+    }
+}
+
+export async function addCommentToDB(
+    commentData: CommentType
+): Promise<CommentType> {
+    try {
+        const newComment = new Comment(commentData);
+        await newComment.save();
+        return newComment.toObject();
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error adding record');
     }
 }
