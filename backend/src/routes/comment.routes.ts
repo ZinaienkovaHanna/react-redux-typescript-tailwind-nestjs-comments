@@ -5,6 +5,8 @@ import {
     getComments,
     getComment,
     addComment,
+    updateComment,
+    deleteComment,
 } from '../services/comment.service.ts';
 
 const router = express.Router();
@@ -14,5 +16,9 @@ router.get('/comments', getComments);
 router.get('/comments/:id', getComment);
 
 router.post('/comments', addComment);
+
+router.patch('/comments/:id', updateComment);
+
+router.delete('/comments/:id', deleteComment);
 
 export default router;

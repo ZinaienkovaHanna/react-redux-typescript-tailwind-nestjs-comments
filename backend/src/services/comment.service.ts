@@ -4,6 +4,8 @@ import {
     getCommentsFromDB,
     getCommentFromDB,
     addCommentToDB,
+    updateCommentToDB,
+    deleteCommentFromDB,
 } from '../repositories/comment.repository.ts';
 import {
     RequestType,
@@ -55,6 +57,43 @@ export async function addComment(
         // await newCommentSchema.validate(newCommentData, { abortEarly: false });
         const newComment = await addCommentToDB(newCommentData);
         res.status(201).json(newComment);
+    } catch (error) {
+        handleError(res, error);
+    }
+}
+
+export async function updateComment(
+    req: RequestType,
+    res: ResponseType
+): Promise<void> {
+    try {
+        const id = req.params.id;
+        const updateCommentData = req.body;
+
+        const updateComment = await updateCommentToDB(id, updateCommentData);
+
+        if (!updateComment) {
+            res.status(404).json({ message: 'Comment not found' });
+        } else {
+            res.status(200).json(updateComment);
+        }
+    } catch (error) {
+        handleError(res, error);
+    }
+}
+
+export async function deleteComment(
+    req: RequestType,
+    res: ResponseType
+): Promise<void> {
+    try {
+        const id = req.params.id;
+        const comment = await deleteCommentFromDB(id);
+        if (!comment) {
+            res.status(404).json({ message: 'Comment not found' });
+        } else {
+            res.status(200).json(comment);
+        }
     } catch (error) {
         handleError(res, error);
     }

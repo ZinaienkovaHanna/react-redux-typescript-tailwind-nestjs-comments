@@ -34,3 +34,28 @@ export async function addCommentToDB(
         throw new Error('Error adding record');
     }
 }
+
+export async function updateCommentToDB(
+    id: string,
+    updateComment: CommentType
+) {
+    try {
+        return await Comment.findByIdAndUpdate(id, updateComment, {
+            new: true,
+        }).exec();
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error updating comment');
+    }
+}
+
+export async function deleteCommentFromDB(
+    id: string
+): Promise<CommentType | null> {
+    try {
+        return await Comment.findByIdAndDelete(id).exec();
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error deleting comment');
+    }
+}
