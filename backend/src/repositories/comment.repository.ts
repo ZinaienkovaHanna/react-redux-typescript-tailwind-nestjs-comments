@@ -1,6 +1,6 @@
 // src/repositories/comment.repository.ts
-import { Comment } from '../models/comment.model.ts';
-import { CommentType } from '../types/comment.types.ts';
+import { Comment, Reply } from '../models/comment.model.ts';
+import { CommentType, ReplyType } from '../types/comment.types.ts';
 
 export async function getCommentsFromDB(): Promise<CommentType[]> {
     try {
@@ -29,6 +29,32 @@ export async function addCommentToDB(
         const newComment = new Comment(commentData);
         await newComment.save();
         return newComment.toObject();
+    } catch (err) {
+        console.error(err);
+        throw new Error('Error adding record');
+    }
+}
+
+export async function addReplyToComment(
+    commentId: string,
+    replyData: ReplyType
+): Promise<CommentType> {
+    try {
+        const comment = await Comment.findById(commentId);
+
+        if (!comment) {
+            throw new Error('Comment not found');
+        }
+
+        const newReply = new Reply(replyData);
+        newReply.replyingTo = comment.user.username;
+
+        comment.replies.push(newReply);
+
+        await newReply.save();
+        await comment.save();
+
+        return comment;
     } catch (err) {
         console.error(err);
         throw new Error('Error adding record');

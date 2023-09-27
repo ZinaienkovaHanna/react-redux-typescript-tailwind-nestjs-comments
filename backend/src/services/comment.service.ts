@@ -4,6 +4,7 @@ import {
     getCommentsFromDB,
     getCommentFromDB,
     addCommentToDB,
+    addReplyToComment,
     updateCommentToDB,
     deleteCommentFromDB,
 } from '../repositories/comment.repository.ts';
@@ -11,6 +12,7 @@ import {
     RequestType,
     ResponseType,
     CommentType,
+    ReplyType,
 } from '../types/comment.types.ts';
 import { validateContentSchema } from '../models/validate.model.ts';
 
@@ -64,6 +66,23 @@ export async function addComment(
         console.error(error);
         handleError(res, error);
     }
+}
+
+export async function addReply(
+    req: RequestType,
+    res: ResponseType
+): Promise<void> {
+    try {
+        const commentId = req.params.id;
+        const newReplyData: ReplyType = req.body;
+
+        // await validateContentSchema.validate(newReplyData, {
+        //     abortEarly: false,
+        // });
+
+        const updateComment = await addReplyToComment(commentId, newReplyData);
+        res.status(201).json(updateComment);
+    } catch (error) {}
 }
 
 export async function updateComment(

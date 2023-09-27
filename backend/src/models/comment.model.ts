@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import currentUser from '../data/currentUser.json' assert { type: 'json' };
-import { CommentDocument } from '../types/comment.types.ts';
+import { CommentDocument, ReplyDocument } from '../types/comment.types.ts';
 
 const replySchema = new Schema({
     content: {
@@ -17,7 +17,6 @@ const replySchema = new Schema({
     },
     replyingTo: {
         type: String,
-        required: true,
     },
     user: {
         image: {
@@ -83,6 +82,8 @@ const commentSchema = new Schema(
     },
     { collection: 'comments', versionKey: false }
 );
+
+export const Reply = mongoose.model<ReplyDocument>('Reply', replySchema);
 
 export const Comment = mongoose.model<CommentDocument>(
     'Comment',

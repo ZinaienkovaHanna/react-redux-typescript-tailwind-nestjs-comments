@@ -12,7 +12,7 @@ interface UserType {
     username: string;
 }
 
-interface ReplyType {
+export interface ReplyType {
     id?: string;
     content: string;
     createdAt: string | Date;
