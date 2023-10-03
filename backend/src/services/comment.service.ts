@@ -7,6 +7,7 @@ import {
     addReplyToComment,
     updateCommentToDB,
     deleteCommentFromDB,
+    deleteReplyFromComment,
 } from '../repositories/comment.repository.ts';
 import {
     RequestType,
@@ -74,13 +75,16 @@ export async function addReply(
 ): Promise<void> {
     try {
         const commentId = req.params.id;
-        const newReplyData: ReplyType = req.body;
+        const newReplyContent = req.body;
 
         // await validateContentSchema.validate(newReplyData, {
         //     abortEarly: false,
         // });
 
-        const updateComment = await addReplyToComment(commentId, newReplyData);
+        const updateComment = await addReplyToComment(
+            commentId,
+            newReplyContent
+        );
         res.status(201).json(updateComment);
     } catch (error) {}
 }
@@ -120,6 +124,26 @@ export async function deleteComment(
             res.status(404).json({ message: 'Comment not found' });
         } else {
             res.status(200).json(comment);
+        }
+    } catch (error) {
+        handleError(res, error);
+    }
+}
+
+export async function deleteReply(
+    req: RequestType,
+    res: ResponseType
+): Promise<void> {
+    try {
+        const commentId = req.params.commentId;
+        const replyId = req.params.replyId;
+
+        const reply = await deleteReplyFromComment(commentId, replyId);
+
+        if (!reply) {
+            res.status(404).json({ message: 'Reply not found' });
+        } else {
+            res.status(200).json(reply);
         }
     } catch (error) {
         handleError(res, error);

@@ -8,6 +8,7 @@ import {
     addReply,
     updateComment,
     deleteComment,
+    deleteReply,
 } from '../services/comment.service.ts';
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router.post('/comments/:id/replies', addReply);
 router.patch('/comments/:id', updateComment);
 
 router.delete('/comments/:id', deleteComment);
+
+router.delete('/comments/:commentId/replies/:replyId', deleteReply);
 
 export default router;
