@@ -4,18 +4,15 @@ import {
     getCommentsFromDB,
     getCommentFromDB,
     addCommentToDB,
-    addReplyToComment,
     updateCommentToDB,
     deleteCommentFromDB,
-    deleteReplyFromComment,
 } from '../repositories/comment.repository.ts';
+
+import { RequestType, ResponseType } from '../types/comment.types.ts';
 import {
-    RequestType,
-    ResponseType,
-    CommentType,
-    ReplyType,
-} from '../types/comment.types.ts';
-import { validateContentSchema } from '../models/validate.model.ts';
+    validateContentSchema,
+    validateDataSchema,
+} from '../models/validate.model.ts';
 
 function handleError(res: ResponseType, error: any): void {
     res.status(500).json({ error: error.message });
@@ -55,7 +52,7 @@ export async function addComment(
     res: ResponseType
 ): Promise<void> {
     try {
-        const newCommentData: CommentType = req.body;
+        const newCommentData = req.body;
 
         await validateContentSchema.validate(newCommentData, {
             abortEarly: false,
@@ -69,26 +66,6 @@ export async function addComment(
     }
 }
 
-export async function addReply(
-    req: RequestType,
-    res: ResponseType
-): Promise<void> {
-    try {
-        const commentId = req.params.id;
-        const newReplyContent = req.body;
-
-        // await validateContentSchema.validate(newReplyData, {
-        //     abortEarly: false,
-        // });
-
-        const updateComment = await addReplyToComment(
-            commentId,
-            newReplyContent
-        );
-        res.status(201).json(updateComment);
-    } catch (error) {}
-}
-
 export async function updateComment(
     req: RequestType,
     res: ResponseType
@@ -97,7 +74,7 @@ export async function updateComment(
         const id = req.params.id;
         const updateCommentData = req.body;
 
-        await validateContentSchema.validate(updateCommentData, {
+        await validateDataSchema.validate(updateCommentData, {
             abortEarly: false,
         });
 
@@ -124,26 +101,6 @@ export async function deleteComment(
             res.status(404).json({ message: 'Comment not found' });
         } else {
             res.status(200).json(comment);
-        }
-    } catch (error) {
-        handleError(res, error);
-    }
-}
-
-export async function deleteReply(
-    req: RequestType,
-    res: ResponseType
-): Promise<void> {
-    try {
-        const commentId = req.params.commentId;
-        const replyId = req.params.replyId;
-
-        const reply = await deleteReplyFromComment(commentId, replyId);
-
-        if (!reply) {
-            res.status(404).json({ message: 'Reply not found' });
-        } else {
-            res.status(200).json(reply);
         }
     } catch (error) {
         handleError(res, error);

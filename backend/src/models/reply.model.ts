@@ -1,20 +1,28 @@
 import mongoose, { Schema } from 'mongoose';
 import currentUser from '../data/currentUser.json' assert { type: 'json' };
-import { CommentType } from '../types/comment.types.ts';
+import { ReplyType } from '../types/comment.types.ts';
 
-const commentSchema = new Schema(
+const replySchema = new Schema(
     {
         content: {
             type: String,
             required: true,
         },
+
+        commentId: {
+            type: String,
+            required: true,
+        },
         createdAt: {
             type: Date,
-            default: Date.now,
+            default: () => Date.now(),
         },
         score: {
             type: Number,
             default: 0,
+        },
+        replyingTo: {
+            type: String,
         },
         user: {
             image: {
@@ -33,7 +41,7 @@ const commentSchema = new Schema(
             },
         },
     },
-    { collection: 'comments', versionKey: false }
+    { collection: 'replies', versionKey: false }
 );
 
-export const Comment = mongoose.model<CommentType>('Comment', commentSchema);
+export const Reply = mongoose.model<ReplyType>('Reply', replySchema);

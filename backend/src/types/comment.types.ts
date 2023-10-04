@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import mongoose, { Document } from 'mongoose';
+import { Document } from 'mongoose';
 
 export type RequestType = Request;
 export type ResponseType = Response;
@@ -13,22 +13,19 @@ interface UserType {
 }
 
 export interface ReplyType {
-    // id?: string;
-    _id: mongoose.Types.ObjectId;
+    commentId: string;
     content: string;
     createdAt: string | Date;
     score: number;
-    replyingTo?: string;
+    replyingTo: string;
     user: UserType;
 }
 
 export interface CommentType extends Document {
-    id?: string;
     content: string;
     createdAt: string | Date;
     score: number;
     user: UserType;
-    replies: ReplyType[];
 }
 
 // export interface CommentType {
